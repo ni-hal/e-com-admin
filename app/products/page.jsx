@@ -3,42 +3,12 @@ import { useState, useMemo } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import ProductModal from '@/components/ProductModal'
 import Link from 'next/link'
+import { useProducts } from '@/context/ProductContext'
+import { useCategories } from '@/context/CategoryContext'
 
 export default function ProductList() {
-  const initialProducts = [
-    {
-      id: 1,
-      name: 'Wireless Mouse',
-      category: 'Electronics',
-      price: '₹799',
-      stock: 25,
-      status: 'Active',
-      label: 'Featured',
-      updated: '10 Feb 2026',
-    },
-    {
-      id: 2,
-      name: 'Bluetooth Speaker',
-      category: 'Electronics',
-      price: '₹1,499',
-      stock: 5,
-      status: 'Active',
-      label: 'On Sale',
-      updated: '08 Feb 2026',
-    },
-    {
-      id: 3,
-      name: 'Laptop Bag',
-      category: 'Accessories',
-      price: '₹999',
-      stock: 0,
-      status: 'Disabled',
-      label: '',
-      updated: '05 Feb 2026',
-    },
-  ]
-
-  const [products, setProducts] = useState(initialProducts)
+  const { products, setProducts } = useProducts()
+  const { categories } = useCategories()
   const [selected, setSelected] = useState([])
   const [categoryFilter, setCategoryFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
@@ -125,7 +95,7 @@ export default function ProductList() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Product List</h1>
         <Link
-          href="admin/products/add"
+          href="/products/add"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
         >
           + Add Product
@@ -148,8 +118,9 @@ export default function ProductList() {
           onChange={(e) => setCategoryFilter(e.target.value)}
         >
           <option value="">All Categories</option>
-          <option>Electronics</option>
-          <option>Accessories</option>
+          {categories.filter(c => c.status === 'Active').map(c => (
+            <option key={c.id} value={c.name}>{c.name}</option>
+          ))}
         </select>
 
         <select
