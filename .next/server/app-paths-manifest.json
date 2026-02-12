@@ -1,6 +1,6 @@
 {
-  "/products/page": "app/products/page.js",
-  "/admin/page": "app/admin/page.js",
+  "/products/add/page": "app/products/add/page.js",
   "/categories/page": "app/categories/page.js",
-  "/products/add/page": "app/products/add/page.js"
+  "/products/bulk-upload/page": "app/products/bulk-upload/page.js",
+  "/products/page": "app/products/page.js"
 }

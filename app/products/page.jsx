@@ -94,12 +94,20 @@ export default function ProductList() {
     <AdminLayout>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Product List</h1>
-        <Link
-          href="/products/add"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-        >
-          + Add Product
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            href="/products/bulk-upload"
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+          >
+            📤 Bulk Upload
+          </Link>
+          <Link
+            href="/products/add"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          >
+            + Add Product
+          </Link>
+        </div>
       </div>
 
       {/* Filters */}
