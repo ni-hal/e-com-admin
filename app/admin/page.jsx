@@ -1,5 +1,6 @@
 'use client'
 import AdminLayout from '@/components/AdminLayout'
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
 
 export default function Dashboard() {
   const kpis = [
@@ -29,15 +30,14 @@ export default function Dashboard() {
   ]
 
   const salesData = [
-    { day: 'Mon', amount: 12000 },
-    { day: 'Tue', amount: 19000 },
-    { day: 'Wed', amount: 15000 },
-    { day: 'Thu', amount: 25000 },
-    { day: 'Fri', amount: 22000 },
-    { day: 'Sat', amount: 30000 },
-    { day: 'Sun', amount: 28000 },
+    { day: 'Jan', current: 12000, previous: 8000 },
+    { day: 'Feb', current: 19000, previous: 15000 },
+    { day: 'March', current: 15000, previous: 20000 },
+    { day: 'April', current: 25000, previous: 18000 },
+    { day: 'May', current: 22000, previous: 24000 },
+    { day: 'June', current: 30000, previous: 28000 },
+    { day: 'July', current: 28000, previous: 30000 },
   ]
-  const maxSales = Math.max(...salesData.map(d => d.amount))
 
   return (
     <AdminLayout>
@@ -54,15 +54,22 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="bg-white p-5 rounded-lg shadow lg:col-span-2">
-          <h3 className="font-semibold mb-4">Sales Chart</h3>
-          <div className="h-56 flex items-end justify-around gap-2 px-4">
-            {salesData.map((data, i) => (
-              <div key={i} className="flex flex-col items-center flex-1">
-                <div className="w-full bg-gray-900 rounded-t" style={{ height: `${(data.amount / maxSales) * 100}%` }}></div>
-                <span className="text-xs mt-2 text-gray-600">{data.day}</span>
-              </div>
-            ))}
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold">Sales Chart</h3>
+            <select className="text-sm border border-gray-300 rounded px-3 py-1 bg-white">
+              <option>Weekly</option>
+              <option>Monthly</option>
+            </select>
           </div>
+          <ResponsiveContainer width="100%" height={224}>
+            <LineChart data={salesData} margin={{ top: 10, right: 10, left: 0, bottom: 10 }}>
+              <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#666" }} />
+              <YAxis hide />
+              <Tooltip formatter={(v) => `₹${v.toLocaleString()}`} />
+              <Line type="natural" dataKey="current" stroke="#3b82f6" strokeWidth={3} dot={false} />
+              <Line type="natural" dataKey="previous" stroke="#ef4444" strokeWidth={3} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
 
         <div className="bg-white p-5 rounded-lg shadow">

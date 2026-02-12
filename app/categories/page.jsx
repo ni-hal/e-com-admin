@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import { useCategories } from '@/context/CategoryContext'
+import { HiChevronDown, HiChevronRight } from 'react-icons/hi'
+import { FaCaretDown,FaCaretRight } from 'react-icons/fa'
 
 export default function CategoryManagement() {
   const { categories: contextCategories, setCategories: setContextCategories } = useCategories()
@@ -94,38 +96,69 @@ export default function CategoryManagement() {
     const isExpanded = expandedCategories.includes(category.id)
 
     return (
-      <div key={category.id}>
-        <div className="flex items-center border-b hover:bg-gray-50 group">
-          <div className="p-3 flex items-center gap-2" style={{ paddingLeft: `${level * 2 + 0.75}rem` }}>
-            <span className="text-gray-400 cursor-move" title="Drag to reorder">⋮⋮</span>
-            {hasChildren && (
-              <button onClick={() => toggleExpand(category.id)} className="text-gray-600 hover:text-gray-900">
-                {isExpanded ? '▼' : '▶'}
+     <div key={category.id}>
+        {/* ROW */}
+        <div className="grid grid-cols-[1fr_80px_96px_128px_96px] items-center bg-gray-100 border-b hover:bg-gray-200 min-h-[56px] transition-colors duration-150">
+
+          <div
+            className="flex items-center gap-4 px-4"
+            // style={{ paddingLeft: `${level * 24 + 16}px` }}
+          >
+            {/* Drag dots */}
+            <span className="text-gray-400 cursor-move text-lg leading-none">
+              ⋮⋮
+            </span>
+
+            {/* Arrow */}
+            {hasChildren ? (
+              <button
+                onClick={() => toggleExpand(category.id)}
+                className="flex items-center justify-center w-5 h-5 text-gray-600"
+              >
+                {isExpanded ? (
+                  <HiChevronDown size={18} />
+                ) : (
+                  <HiChevronRight size={18} />
+                )}
               </button>
+            ) : (
+              <span className="w-5" />
             )}
-            {!hasChildren && <span className="w-4"></span>}
+
+            {/* Category name */}
+            <span className="text-lg font-medium text-gray-900 ">
+              {category.nameEn}
+            </span>
           </div>
-          <div className="flex-1 p-3 flex items-center gap-4">
-            <div className="flex-1">
-              <div className="font-medium">{category.nameEn}</div>
-              <div className="text-sm text-gray-500" dir="rtl">{category.nameAr}</div>
-            </div>
-            <div className="text-sm text-gray-600 w-20 text-center">{category.sortOrder}</div>
-            <div className="w-24">
-              <span className={`px-2 py-1 text-xs rounded ${category.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
-                {category.status}
-              </span>
-            </div>
-            <div className="flex gap-2 w-32">
-              <button onClick={() => handleEdit(category)} className="text-blue-600 hover:text-blue-800">Edit</button>
-              <button onClick={() => handleDelete(category.id, category.nameEn)} className="text-red-600 hover:text-red-800">Delete</button>
-            </div>
-            <div className="w-24">
-              <button onClick={() => handleAddSubcategory(category)} className="text-green-600 hover:text-green-800 text-sm">+ Sub</button>
-            </div>
+
+          {/* Sort Order */}
+          <div className="text-center text-sm text-gray-600">
+            {category.sortOrder}
+          </div>
+
+          {/* Status */}
+          <div className="px-3">
+            <span className={`px-2 py-1 text-xs rounded ${category.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
+              {category.status}
+            </span>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-2 px-3">
+            <button onClick={() => handleEdit(category)} className="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
+            <button onClick={() => handleDelete(category.id, category.nameEn)} className="text-red-600 hover:text-red-800 text-sm">Delete</button>
+          </div>
+
+          {/* Add Sub */}
+          <div className="px-3">
+            <button onClick={() => handleAddSubcategory(category)} className="text-green-600 hover:text-green-800 text-sm">+ Sub</button>
           </div>
         </div>
-        {hasChildren && isExpanded && children.map(child => renderCategory(child, level + 1))}
+
+        {/* Children */}
+        {hasChildren &&
+          isExpanded &&
+          children.map(child => renderCategory(child, level + 1))}
       </div>
     )
   }
@@ -145,12 +178,12 @@ export default function CategoryManagement() {
       </div>
 
       <div className="bg-white rounded-lg shadow border">
-        <div className="flex items-center bg-gray-50 border-b font-medium text-sm text-gray-700">
-          <div className="p-3 flex-1">Category Name (EN / AR)</div>
-          <div className="p-3 w-20 text-center">Sort Order</div>
-          <div className="p-3 w-24">Status</div>
-          <div className="p-3 w-32">Actions</div>
-          <div className="p-3 w-24"></div>
+        <div className="grid grid-cols-[1fr_80px_96px_128px_96px] items-center bg-gray-50 border-b font-medium text-sm text-gray-700">
+          <div className="p-3">Category Name</div>
+          <div className="p-3 text-center">Sort Order</div>
+          <div className="p-3">Status</div>
+          <div className="p-3">Actions</div>
+          <div className="p-3"></div>
         </div>
         {getParents().length === 0 ? (
           <div className="p-8 text-center text-gray-500">No categories found</div>
