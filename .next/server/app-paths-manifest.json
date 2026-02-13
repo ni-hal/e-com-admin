@@ -1,6 +1,4 @@
 {
-  "/categories/page": "app/categories/page.js",
-  "/products/page": "app/products/page.js",
-  "/products/bulk-upload/page": "app/products/bulk-upload/page.js",
-  "/admin/page": "app/admin/page.js"
+  "/order/page": "app/order/page.js",
+  "/order/[id]/page": "app/order/[id]/page.js"
 }

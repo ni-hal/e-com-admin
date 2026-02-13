@@ -13,15 +13,20 @@ export default function AdminLayout({ children }) {
           <Link href="/admin" className="block px-3 py-2 rounded hover:bg-gray-700">
             Dashboard
           </Link>
-          <Link href="#" className="block px-3 py-2 rounded hover:bg-gray-700">
-            Orders
-          </Link>
-          <Link href="/products" className="block px-3 py-2 rounded hover:bg-gray-700">
-            Products
-          </Link>
+
           <Link href="/categories" className="block px-3 py-2 rounded hover:bg-gray-700">
             Categories
           </Link>
+
+           <Link href="/products" className="block px-3 py-2 rounded hover:bg-gray-700">
+            Products
+          </Link>
+          
+          <Link href="/order" className="block px-3 py-2 rounded hover:bg-gray-700">
+            Orders
+          </Link>
+         
+          
           <Link href="#" className="block px-3 py-2 rounded hover:bg-gray-700">
             Customers
           </Link>
