@@ -104,15 +104,26 @@ export default function PromotionsPage() {
 
   const confirmActionHandler = () => {
     if (confirmAction.type === 'toggle') {
-      setCoupons(coupons.map(c => 
-        c.id === confirmAction.coupon.id 
+      setCoupons(coupons.map(c =>
+        c.id === confirmAction.coupon.id
           ? { ...c, status: c.status === 'Active' ? 'Disabled' : 'Active' }
           : c
       ))
     } else if (confirmAction.type === 'delete') {
       setCoupons(coupons.filter(c => c.id !== confirmAction.coupon.id))
+    } else if (confirmAction.type === 'deleteBanner') {
+      setBanners(banners.filter(b => b.id !== confirmAction.banner.id))
     }
     setShowConfirmModal(false)
+  }
+
+  const handleEditBanner = (banner) => {
+    setShowBannerForm(true)
+  }
+
+  const handleDeleteBanner = (banner) => {
+    setConfirmAction({ type: 'deleteBanner', banner })
+    setShowConfirmModal(true)
   }
 
   return (
@@ -198,7 +209,7 @@ export default function PromotionsPage() {
         </div>
       </div>
 
-      {/* Promo Banners Section */}
+      {/* Promo Banners Section  want to edit and delete */}
       <div className="bg-white rounded-lg shadow">
         <div className="p-5 border-b flex items-center justify-between">
           <h2 className="font-semibold text-lg">Homepage Banners</h2>
@@ -260,8 +271,8 @@ export default function PromotionsPage() {
                   {banner.status}
                 </span>
                 <div className="flex gap-2 mt-3">
-                  <button className="text-blue-600 hover:text-blue-800 text-xs font-medium">Edit</button>
-                  <button className="text-red-600 hover:text-red-800 text-xs font-medium">Delete</button>
+                  <button onClick={() => handleEditBanner(banner)} className="text-blue-600 hover:text-blue-800 text-xs font-medium">Edit</button>
+                  <button onClick={() => handleDeleteBanner(banner)} className="text-red-600 hover:text-red-800 text-xs font-medium">Delete</button>
                 </div>
               </div>
             </div>
@@ -275,20 +286,21 @@ export default function PromotionsPage() {
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div className="p-5">
               <h2 className="font-semibold text-lg mb-4">
-                {confirmAction.type === 'delete' ? 'Delete Coupon' : 'Change Status'}
+                {confirmAction.type === 'delete' ? 'Delete Coupon' : confirmAction.type === 'deleteBanner' ? 'Delete Banner' : 'Change Status'}
               </h2>
               <p className="text-gray-600 mb-6">
-                {confirmAction.type === 'delete' 
+                {confirmAction.type === 'delete'
                   ? `Are you sure you want to delete coupon "${confirmAction.coupon?.code}"? This action cannot be undone.`
+                  : confirmAction.type === 'deleteBanner'
+                  ? `Are you sure you want to delete banner "${confirmAction.banner?.title}"? This action cannot be undone.`
                   : `Are you sure you want to ${confirmAction.coupon?.status === 'Active' ? 'disable' : 'enable'} coupon "${confirmAction.coupon?.code}"?`
                 }
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={confirmActionHandler}
-                  className={`px-4 py-2 rounded text-sm font-medium text-white ${
-                    confirmAction.type === 'delete' ? 'bg-red-600 hover:bg-red-700' : 'bg-orange-600 hover:bg-orange-700'
-                  }`}
+                  className={`px-4 py-2 rounded text-sm font-medium text-white ${confirmAction.type === 'delete' ? 'bg-red-600 hover:bg-red-700' : 'bg-orange-600 hover:bg-orange-700'
+                    }`}
                 >
                   Confirm
                 </button>
@@ -323,7 +335,7 @@ export default function PromotionsPage() {
                   <input
                     type="text"
                     value={couponForm.code}
-                    onChange={(e) => setCouponForm({...couponForm, code: e.target.value})}
+                    onChange={(e) => setCouponForm({ ...couponForm, code: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
                     placeholder="e.g., SAVE10"
                   />
@@ -332,7 +344,7 @@ export default function PromotionsPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Discount Type</label>
                   <select
                     value={couponForm.type}
-                    onChange={(e) => setCouponForm({...couponForm, type: e.target.value})}
+                    onChange={(e) => setCouponForm({ ...couponForm, type: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white"
                   >
                     <option>Percentage</option>
@@ -344,7 +356,7 @@ export default function PromotionsPage() {
                   <input
                     type="text"
                     value={couponForm.value}
-                    onChange={(e) => setCouponForm({...couponForm, value: e.target.value})}
+                    onChange={(e) => setCouponForm({ ...couponForm, value: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
                     placeholder={couponForm.type === 'Percentage' ? '10' : '100'}
                   />
@@ -354,7 +366,7 @@ export default function PromotionsPage() {
                   <input
                     type="text"
                     value={couponForm.minCart}
-                    onChange={(e) => setCouponForm({...couponForm, minCart: e.target.value})}
+                    onChange={(e) => setCouponForm({ ...couponForm, minCart: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
                     placeholder="500"
                   />
@@ -364,7 +376,7 @@ export default function PromotionsPage() {
                   <input
                     type="text"
                     value={couponForm.usageLimit}
-                    onChange={(e) => setCouponForm({...couponForm, usageLimit: e.target.value})}
+                    onChange={(e) => setCouponForm({ ...couponForm, usageLimit: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
                     placeholder="100"
                   />
@@ -374,7 +386,7 @@ export default function PromotionsPage() {
                   <input
                     type="text"
                     value={couponForm.perUserLimit}
-                    onChange={(e) => setCouponForm({...couponForm, perUserLimit: e.target.value})}
+                    onChange={(e) => setCouponForm({ ...couponForm, perUserLimit: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
                     placeholder="1"
                   />
@@ -384,7 +396,7 @@ export default function PromotionsPage() {
                   <input
                     type="date"
                     value={couponForm.validFrom}
-                    onChange={(e) => setCouponForm({...couponForm, validFrom: e.target.value})}
+                    onChange={(e) => setCouponForm({ ...couponForm, validFrom: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
                   />
                 </div>
@@ -393,7 +405,7 @@ export default function PromotionsPage() {
                   <input
                     type="date"
                     value={couponForm.validTo}
-                    onChange={(e) => setCouponForm({...couponForm, validTo: e.target.value})}
+                    onChange={(e) => setCouponForm({ ...couponForm, validTo: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
                   />
                 </div>
@@ -401,7 +413,7 @@ export default function PromotionsPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Applies To</label>
                   <select
                     value={couponForm.appliesTo}
-                    onChange={(e) => setCouponForm({...couponForm, appliesTo: e.target.value})}
+                    onChange={(e) => setCouponForm({ ...couponForm, appliesTo: e.target.value })}
                     className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white"
                   >
                     <option>All Products</option>
