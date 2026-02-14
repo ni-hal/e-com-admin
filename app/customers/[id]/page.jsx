@@ -69,7 +69,7 @@ export default function CustomerProfilePage({ params }) {
     <AdminLayout>
       <div className="max-w-7xl">
         <div className="mb-6">
-          <Link href="/admin/customers" className="text-blue-600 hover:text-blue-800 text-sm mb-2 inline-block">
+          <Link href="/customers" className="text-blue-600 hover:text-blue-800 text-sm mb-2 inline-block">
             ← Back to Customers
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">Customer Profile</h1>
