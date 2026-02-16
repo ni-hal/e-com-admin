@@ -1,8 +1,5 @@
 {
-  "/customers/page": "app/customers/page.js",
-  "/products/page": "app/products/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/promotions/page": "app/promotions/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/shipping/page": "app/shipping/page.js",
-  "/admin/shipping/page": "app/admin/shipping/page.js"
+  "/promotions/page": "app/promotions/page.js"
 }
