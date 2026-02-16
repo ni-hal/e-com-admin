@@ -3,31 +3,14 @@ import { useState } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import Link from 'next/link'
 import { orders } from '../../Index/data'
+import { IoSearchOutline, IoCloseOutline, IoEllipsisHorizontal } from 'react-icons/io5'
+import { HiOutlineMail, HiOutlinePhone, HiOutlineChat } from 'react-icons/hi'
+import { BsBox } from 'react-icons/bs'
 
 export default function OrdersPage() {
-  const [filters, setFilters] = useState({
-    dateFrom: '',
-    dateTo: '',
-    orderStatus: '',
-    paymentStatus: '',
-    shippingMethod: '',
-    search: ''
-  })
+  const [selectedOrder, setSelectedOrder] = useState(orders[0])
   const [selectedOrders, setSelectedOrders] = useState([])
-
-
-
-  const handleFilterChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }))
-  }
-
-  const handleReset = () => {
-    setFilters({ dateFrom: '', dateTo: '', orderStatus: '', paymentStatus: '', shippingMethod: '', search: '' })
-  }
-
-  const toggleSelectAll = () => {
-    setSelectedOrders(selectedOrders.length === orders.length ? [] : orders.map(o => o.id))
-  }
+  const [filters, setFilters] = useState({ status: 'Any status', price: '$100-$500' })
 
   const toggleSelectOrder = (id) => {
     setSelectedOrders(prev => 
@@ -35,240 +18,192 @@ export default function OrdersPage() {
     )
   }
 
-  const getPaymentBadge = (status) => {
-    const styles = {
-      Paid: 'bg-green-100 text-green-700',
-      Unpaid: 'bg-yellow-100 text-yellow-700',
-      Refunded: 'bg-gray-100 text-gray-700'
+  const getStatusColor = (status) => {
+    const colors = {
+      Paid: 'bg-yellow-100 text-yellow-700',
+      Delivered: 'bg-orange-100 text-orange-700',
+      Completed: 'bg-green-100 text-green-700'
     }
-    return styles[status] || 'bg-gray-100 text-gray-700'
-  }
-
-  const getFulfillmentBadge = (status) => {
-    const styles = {
-      Delivered: 'bg-green-100 text-green-700',
-      Pending: 'bg-yellow-100 text-yellow-700',
-      Cancelled: 'bg-red-100 text-red-700',
-      Shipped: 'bg-blue-100 text-blue-700',
-      Processing: 'bg-purple-100 text-purple-700'
-    }
-    return styles[status] || 'bg-gray-100 text-gray-700'
+    return colors[status] || 'bg-yellow-100 text-yellow-700'
   }
 
   return (
     <AdminLayout>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Orders</h1>
-        <p className="text-gray-500 text-sm">Manage customer orders</p>
-      </div>
+      <div className="flex gap-6 h-[calc(100vh-120px)]">
+        {/* Orders List */}
+        <div className="flex-1 bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col">
+          <div className="p-4 border-b">
+            <h1 className="text-2xl font-bold mb-4">Orders</h1>
+            <div className="flex gap-3 mb-4">
+              <select className="px-4 py-2 border border-gray-300 rounded-lg text-sm">
+                <option>Any status</option>
+                <option>Paid</option>
+                <option>Delivered</option>
+                <option>Completed</option>
+              </select>
+              <select className="px-4 py-2 border border-gray-300 rounded-lg text-sm">
+                <option>$100-$500</option>
+                <option>$500-$1000</option>
+                <option>$1000+</option>
+              </select>
+              <div className="flex-1"></div>
+              <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm">Sort by Date</button>
+            </div>
+            <div className="relative">
+              <IoSearchOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder="Search orders..."
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm"
+              />
+            </div>
+          </div>
 
-      {/* Filters Section */}
-      <div className="bg-white p-5 rounded-lg shadow mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date From</label>
-            <input
-              type="date"
-              value={filters.dateFrom}
-              onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date To</label>
-            <input
-              type="date"
-              value={filters.dateTo}
-              onChange={(e) => handleFilterChange('dateTo', e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Order Status</label>
-            <select
-              value={filters.orderStatus}
-              onChange={(e) => handleFilterChange('orderStatus', e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white"
-            >
-              <option value="">All</option>
-              <option value="Pending">Pending</option>
-              <option value="Processing">Processing</option>
-              <option value="Shipped">Shipped</option>
-              <option value="Delivered">Delivered</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
-            <select
-              value={filters.paymentStatus}
-              onChange={(e) => handleFilterChange('paymentStatus', e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white"
-            >
-              <option value="">All</option>
-              <option value="Paid">Paid</option>
-              <option value="Unpaid">Unpaid</option>
-              <option value="Refunded">Refunded</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Shipping Method</label>
-            <select
-              value={filters.shippingMethod}
-              onChange={(e) => handleFilterChange('shippingMethod', e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white"
-            >
-              <option value="">All</option>
-              <option value="Standard">Standard</option>
-              <option value="Express">Express</option>
-              <option value="Pickup">Pickup</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
-            <input
-              type="text"
-              placeholder="Order ID or Customer Name"
-              value={filters.search}
-              onChange={(e) => handleFilterChange('search', e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            />
-          </div>
-        </div>
-        <div className="flex gap-3">
-          <button className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-700">
-            Apply Filters
-          </button>
-          <button
-            onClick={handleReset}
-            className="bg-gray-100 text-gray-700 px-4 py-2 rounded text-sm font-medium hover:bg-gray-200"
-          >
-            Reset
-          </button>
-        </div>
-      </div>
-
-      {/* Bulk Actions */}
-      {selectedOrders.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-4 flex items-center gap-4">
-          <span className="text-sm font-medium text-blue-900">
-            {selectedOrders.length} order(s) selected
-          </span>
-          <select className="border border-blue-300 rounded px-3 py-1.5 text-sm bg-white">
-            <option value="">Bulk Update Status</option>
-            <option value="Processing">Mark as Processing</option>
-            <option value="Shipped">Mark as Shipped</option>
-            <option value="Delivered">Mark as Delivered</option>
-            <option value="Cancelled">Mark as Cancelled</option>
-          </select>
-          <button className="bg-blue-600 text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-blue-700">
-            Apply
-          </button>
-        </div>
-      )}
-
-      {/* Orders Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b">
-              <tr>
-                <th className="px-4 py-3 text-left">
-                  <input
-                    type="checkbox"
-                    checked={selectedOrders.length === orders.length}
-                    onChange={toggleSelectAll}
-                    className="rounded border-gray-300"
-                  />
-                </th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">Order ID</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">Date</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">Customer Name</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">Total Amount</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">Payment Status</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">Fulfillment Status</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">Shipping Method</th>
-                <th className="px-4 py-3 text-left font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr
-                  key={order.id}
-                  className="border-b hover:bg-gray-50 transition-colors"
-                >
-                  <td className="px-4 py-3">
-                    <input
-                      type="checkbox"
-                      checked={selectedOrders.includes(order.id)}
-                      onChange={() => toggleSelectOrder(order.id)}
-                      className="rounded border-gray-300"
-                    />
-                  </td>
-                  <td className="px-4 py-3 font-medium text-blue-600">
-                    <Link href={`/admin/order/${encodeURIComponent(order.id)}`}>
-                      {order.id}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3 text-gray-600">{order.date}</td>
-                  <td className="px-4 py-3 text-gray-900">{order.customer}</td>
-                  <td className="px-4 py-3 font-semibold text-gray-900">{order.amount}</td>
-                  <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPaymentBadge(order.paymentStatus)}`}>
-                      {order.paymentStatus}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getFulfillmentBadge(order.fulfillmentStatus)}`}>
-                      {order.fulfillmentStatus}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-gray-600">{order.shippingMethod}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/order/${encodeURIComponent(order.id)}`}
-                        className="text-blue-600 hover:text-blue-800 font-medium"
-                        title="View Order"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                      </Link>
-                      <select
-                        className="border border-gray-300 rounded px-2 py-1 text-xs bg-white"
-                        title="Update Status"
-                      >
-                        <option value="">Update</option>
-                        <option value="Processing">Processing</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
-                      </select>
-                      <button
-                        className="text-gray-600 hover:text-gray-800"
-                        title="Print Invoice"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                        </svg>
-                      </button>
-                      <button
-                        className="text-gray-600 hover:text-gray-800"
-                        title="Export"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                      </button>
-                    </div>
-                  </td>
+          <div className="flex-1 overflow-y-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 sticky top-0">
+                <tr className="text-left border-b">
+                  <th className="px-4 py-3 w-12">
+                    <input type="checkbox" className="rounded" />
+                  </th>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-600">Order</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-600">Customer</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-600">Status</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-600">Total</th>
+                  <th className="px-4 py-3 text-xs font-semibold text-gray-600">Date</th>
+                  <th className="px-4 py-3 w-12"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr
+                    key={order.id}
+                    onClick={() => setSelectedOrder(order)}
+                    className={`border-b hover:bg-gray-50 cursor-pointer transition-colors ${
+                      selectedOrder?.id === order.id ? 'bg-blue-50' : ''
+                    }`}
+                  >
+                    <td className="px-4 py-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedOrders.includes(order.id)}
+                        onChange={() => toggleSelectOrder(order.id)}
+                        onClick={(e) => e.stopPropagation()}
+                        className="rounded"
+                      />
+                    </td>
+                    <td className="px-4 py-3 font-medium text-gray-900">{order.id}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-pink-400 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                          {order.customer.charAt(0)}
+                        </div>
+                        <span className="text-sm text-gray-900">{order.customer}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.paymentStatus)}`}>
+                        {order.paymentStatus}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 font-semibold text-gray-900">{order.amount}</td>
+                    <td className="px-4 py-3 text-sm text-gray-600">{order.date}</td>
+                    <td className="px-4 py-3">
+                      <button className="p-1 hover:bg-gray-100 rounded">
+                        <IoEllipsisHorizontal size={18} className="text-gray-400" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
+
+        {/* Order Detail Panel */}
+        {selectedOrder && (
+          <div className="w-96 bg-white rounded-2xl shadow-sm p-6 overflow-y-auto">
+            <div className="flex items-start justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-bold">Order {selectedOrder.id}</h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(selectedOrder.paymentStatus)}`}>
+                    {selectedOrder.paymentStatus}
+                  </span>
+                  <span className="text-sm text-gray-500">{selectedOrder.date}</span>
+                </div>
+              </div>
+              <button className="p-2 hover:bg-gray-100 rounded-lg">
+                <IoCloseOutline size={24} />
+              </button>
+            </div>
+
+            {/* Customer Info */}
+            <div className="mb-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-pink-400 rounded-full flex items-center justify-center text-white text-xl font-semibold">
+                  {selectedOrder.customer.charAt(0)}
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">{selectedOrder.customer}</h3>
+                  <p className="text-sm text-gray-500">customer@gmail.com</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button className="flex-1 flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                  <HiOutlineMail size={18} />
+                </button>
+                <button className="flex-1 flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                  <HiOutlinePhone size={18} />
+                </button>
+                <button className="flex-1 flex items-center justify-center gap-2 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                  <HiOutlineChat size={18} />
+                </button>
+              </div>
+            </div>
+
+            {/* Order Items */}
+            <div className="mb-6">
+              <h3 className="font-semibold mb-3">Order Items</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                    <BsBox size={20} className="text-gray-500" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">FLEX ONE drill/driver</p>
+                    <p className="text-xs text-gray-500 mt-1">{selectedOrder.amount}</p>
+                  </div>
+                </div>
+                <div className="flex gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                    <BsBox size={20} className="text-gray-500" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-sm">Socket Systems Electric</p>
+                    <p className="text-xs text-gray-500 mt-1">₹280.00</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Total */}
+            <div className="pt-4 border-t">
+              <div className="flex justify-between items-center mb-4">
+                <span className="font-semibold">Total</span>
+                <span className="text-2xl font-bold">{selectedOrder.amount}</span>
+              </div>
+              <div className="flex gap-2">
+                <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800">
+                  <span className="text-sm font-medium">Track</span>
+                </button>
+                <button className="flex-1 flex items-center justify-center gap-2 py-3 bg-yellow-400 text-gray-900 rounded-lg hover:bg-yellow-500">
+                  <span className="text-sm font-medium">Refund</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </AdminLayout>
   )

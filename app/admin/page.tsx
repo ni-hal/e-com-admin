@@ -1,97 +1,137 @@
 'use client'
 import AdminLayout from '@/components/AdminLayout'
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, PieChart, Pie, Cell } from 'recharts'
+import { IoArrowUpOutline, IoTrendingUpOutline, IoWalletOutline, IoSearchOutline } from 'react-icons/io5'
+import { BiDollarCircle, BiTargetLock } from 'react-icons/bi'
+import { HiOutlineUsers, HiOutlineBell } from 'react-icons/hi'
+import { AiOutlineBarChart, AiOutlineSetting } from 'react-icons/ai'
 import { kpis, salesData, products, recentOrders, lowStock } from '../../Index/data'
+
+const iconMap = [BiDollarCircle, HiOutlineUsers, BiTargetLock, IoWalletOutline]
+const bgColors = ['bg-gradient-to-br from-lime-300 to-lime-400', 'bg-white', 'bg-white', 'bg-white']
+
 export default function Dashboard() {
-
-
   return (
     <AdminLayout>
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        {kpis.map((kpi, i) => (
-          <div key={i} className="bg-white p-5 rounded-lg shadow">
-            <p className="text-gray-500 text-sm">{kpi.title}</p>
-            <h2 className="text-2xl font-bold">{kpi.value}</h2>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-gray-500 text-sm">See all your business information here</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium">2 New</button>
+          <button className="p-2 hover:bg-gray-100 rounded-lg"><IoSearchOutline size={20} /></button>
+          <button className="p-2 hover:bg-gray-100 rounded-lg"><HiOutlineBell size={20} /></button>
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+            <div>
+              <p className="text-xs text-gray-500">Welcome back</p>
+              <p className="text-sm font-semibold">Admin</p>
+            </div>
           </div>
-        ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {kpis.map((kpi, i) => {
+          const Icon = iconMap[i]
+          return (
+            <div key={i} className={`${bgColors[i]} p-6 rounded-2xl shadow-sm relative overflow-hidden`}>
+              <div className="flex justify-between items-start mb-8">
+                <Icon size={32} className="text-gray-700" />
+                <button className="p-2 bg-white/20 rounded-full hover:bg-white/30">
+                  <IoArrowUpOutline size={20} />
+                </button>
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold">{kpi.value}</h2>
+                <p className="text-sm text-gray-600 mt-1">{kpi.title}</p>
+              </div>
+            </div>
+          )
+        })}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="bg-white p-5 rounded-lg shadow lg:col-span-2">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Sales Chart</h3>
-            <select className="text-sm border border-gray-300 rounded px-3 py-1 bg-white">
-              <option>Weekly</option>
-              <option>Monthly</option>
-            </select>
+        <div className="bg-white p-6 rounded-2xl shadow-sm lg:col-span-2">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <AiOutlineBarChart size={20} />
+              <h3 className="font-semibold text-lg">Sales Statistics</h3>
+            </div>
+            <div className="flex items-center gap-4">
+              <button className="text-sm font-medium px-4 py-2 bg-gray-100 rounded-lg">Monthly</button>
+              <button className="p-2 hover:bg-gray-100 rounded-lg"><AiOutlineSetting size={18} /></button>
+            </div>
           </div>
-          <ResponsiveContainer width="100%" height={224}>
-            <LineChart data={salesData} margin={{ top: 10, right: 10, left: 0, bottom: 10 }}>
-              <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#666" }} />
+          
+          <div className="grid grid-cols-2 gap-8 mb-6">
+            <div>
+              <p className="text-gray-500 text-sm mb-1">Current Period</p>
+              <h3 className="text-4xl font-bold mb-1">₹{salesData.reduce((a,b) => a + b.current, 0).toLocaleString()}</h3>
+              <p className="text-green-600 text-sm flex items-center gap-1">
+                <IoTrendingUpOutline size={14} /> 12% vs Last Period
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm mb-1">Previous Period</p>
+              <h3 className="text-4xl font-bold mb-1">₹{salesData.reduce((a,b) => a + b.previous, 0).toLocaleString()}</h3>
+              <p className="text-green-600 text-sm flex items-center gap-1">
+                <IoTrendingUpOutline size={14} /> Comparison
+              </p>
+            </div>
+          </div>
+
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={salesData}>
+              <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
               <YAxis hide />
-              <Tooltip formatter={(v) => `₹${(v as number).toLocaleString()}`} />
-              <Line type="natural" dataKey="current" stroke="#3b82f6" strokeWidth={3} dot={false} />
-              <Line type="natural" dataKey="previous" stroke="#ef4444" strokeWidth={3} dot={false} />
-            </LineChart>
+              <Tooltip />
+              <Bar dataKey="current" fill="#d4ff00" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="previous" fill="#8ab4f8" radius={[8, 8, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white p-5 rounded-lg shadow">
-          <h3 className="font-semibold mb-4">Top Products</h3>
-          <ul className="space-y-2">
+        <div className="bg-white p-6 rounded-2xl shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <HiOutlineUsers size={20} />
+              <h3 className="font-semibold text-lg">Top Products</h3>
+            </div>
+          </div>
+
+          <div className="relative flex justify-center items-center mb-6">
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie data={products.map((p, i) => ({ name: p.name, value: p.sales }))} cx="50%" cy="50%" innerRadius={60} outerRadius={90} dataKey="value">
+                  {products.map((_, i) => (
+                    <Cell key={i} fill={['#d4ff00', '#8ab4f8', '#e8eaed'][i]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center">
+                <p className="text-3xl font-bold">{products[0].sales}</p>
+                <p className="text-sm text-gray-500">Top Sales</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
             {products.map((p, i) => (
-              <li key={i} className="flex justify-between">
-                <span>{p.name}</span>
-                <span className="text-gray-500">{p.sales}</span>
-              </li>
+              <div key={i}>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-gray-600">{p.name}</span>
+                  <span className="font-semibold">{p.sales} units</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="h-2 rounded-full" style={{ width: `${(p.sales / 120) * 100}%`, backgroundColor: ['#d4ff00', '#8ab4f8', '#e8eaed'][i] }}></div>
+                </div>
+              </div>
             ))}
-          </ul>
-        </div>
-
-        <div className="bg-white p-5 rounded-lg shadow lg:col-span-2">
-          <h3 className="font-semibold mb-4">Recent Orders</h3>
-          <table className="w-full text-sm">
-            <thead className="text-left text-gray-500 border-b">
-              <tr>
-                <th className="py-2">Order</th>
-                <th>Customer</th>
-                <th>Amount</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentOrders.map((o, i) => (
-                <tr key={i} className="border-b">
-                  <td className="py-2">{o.id}</td>
-                  <td>{o.name}</td>
-                  <td>{o.amount}</td>
-                  <td>
-                    <span className={`px-2 py-1 rounded text-xs ${
-                      o.status === 'Pending'
-                        ? 'bg-yellow-100 text-yellow-700'
-                        : 'bg-green-100 text-green-700'
-                    }`}>
-                      {o.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="bg-white p-5 rounded-lg shadow">
-          <h3 className="font-semibold mb-4">Stock Alerts</h3>
-          <ul className="space-y-2">
-            {lowStock.map((item, i) => (
-              <li key={i} className="text-red-600 flex justify-between">
-                <span>{item.name}</span>
-                <span>{item.stock} left</span>
-              </li>
-            ))}
-          </ul>
+          </div>
         </div>
       </div>
     </AdminLayout>
