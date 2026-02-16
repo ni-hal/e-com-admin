@@ -1,6 +1,7 @@
 import './globals.css'
 import { ProductProvider } from '@/context/ProductContext'
 import { CategoryProvider } from '@/context/CategoryContext'
+import { LanguageProvider } from '@/context/LanguageContext'
 
 export const metadata = {
   title: 'E-Commerce Admin',
@@ -9,11 +10,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html>
       <body>
-        <ProductProvider>
-          <CategoryProvider>{children}</CategoryProvider>
-        </ProductProvider>
+        <LanguageProvider>
+          <ProductProvider>
+            <CategoryProvider>{children}</CategoryProvider>
+          </ProductProvider>
+        </LanguageProvider>
       </body>
     </html>
   )
