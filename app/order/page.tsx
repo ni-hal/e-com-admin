@@ -9,17 +9,17 @@ import { BsBox } from 'react-icons/bs'
 
 export default function OrdersPage() {
   const [selectedOrder, setSelectedOrder] = useState(orders[0])
-  const [selectedOrders, setSelectedOrders] = useState([])
+  const [selectedOrders, setSelectedOrders] = useState<string[]>([])
   const [filters, setFilters] = useState({ status: 'Any status', price: '$100-$500' })
 
-  const toggleSelectOrder = (id) => {
+  const toggleSelectOrder = (id: string) => {
     setSelectedOrders(prev => 
       prev.includes(id) ? prev.filter(oid => oid !== id) : [...prev, id]
     )
   }
 
-  const getStatusColor = (status) => {
-    const colors = {
+  const getStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
       Paid: 'bg-yellow-100 text-yellow-700',
       Delivered: 'bg-orange-100 text-orange-700',
       Completed: 'bg-green-100 text-green-700'
