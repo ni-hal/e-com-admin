@@ -1,4 +1,5 @@
 'use client'
+import AdminLayout from '@/components/AdminLayout'
 import { reportTabs ,salesReportData,topProducts, inventoryData ,orderStatusData ,paymentData,colors} from '../../Index/data'
 import { useState } from 'react'
 
@@ -39,6 +40,7 @@ export default function ReportsPage() {
   }
 
   return (
+      <AdminLayout>
     <div className="p-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Reports & Analytics</h1>
@@ -371,5 +373,6 @@ export default function ReportsPage() {
         </div>
       )}
     </div>
+      </AdminLayout>
   )
 }
