@@ -35,6 +35,10 @@ export default function AdminLayout({ children }) {
             Coupon
           </Link>
 
+           <Link href="/shipping" className="block px-3 py-2 rounded hover:bg-gray-700">
+            Shipping Details
+          </Link>
+
           <Link href="/reports" className="block px-3 py-2 rounded hover:bg-gray-700">
             Reports
           </Link>

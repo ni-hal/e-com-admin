@@ -1,43 +1,9 @@
 'use client'
 import AdminLayout from '@/components/AdminLayout'
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
-
+import { kpis, salesData, products, recentOrders, lowStock } from '../../Index/data'
 export default function Dashboard() {
-  const kpis = [
-    { title: 'Today Sales', value: '₹12,500' },
-    { title: 'Total Orders', value: '320' },
-    { title: 'Pending Orders', value: '18' },
-    { title: 'Low Stock Items', value: '6' },
-  ]
 
-  const orders = [
-    { id: '#1001', name: 'Rahul', amount: '₹1,200', status: 'Delivered' },
-    { id: '#1002', name: 'Anjali', amount: '₹850', status: 'Pending' },
-    { id: '#1003', name: 'Vikas', amount: '₹2,400', status: 'Shipped' },
-    { id: '#1004', name: 'Sneha', amount: '₹650', status: 'Pending' },
-  ]
-
-  const products = [
-    { name: 'Wireless Mouse', sales: 120 },
-    { name: 'Bluetooth Speaker', sales: 95 },
-    { name: 'Laptop Bag', sales: 80 },
-  ]
-
-  const lowStock = [
-    { name: 'USB Cable', stock: 5 },
-    { name: 'Power Bank', stock: 3 },
-    { name: 'Headphones', stock: 4 },
-  ]
-
-  const salesData = [
-    { day: 'Jan', current: 12000, previous: 8000 },
-    { day: 'Feb', current: 19000, previous: 15000 },
-    { day: 'March', current: 15000, previous: 20000 },
-    { day: 'April', current: 25000, previous: 18000 },
-    { day: 'May', current: 22000, previous: 24000 },
-    { day: 'June', current: 30000, previous: 28000 },
-    { day: 'July', current: 28000, previous: 30000 },
-  ]
 
   return (
     <AdminLayout>
@@ -96,7 +62,7 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((o, i) => (
+              {recentOrders.map((o, i) => (
                 <tr key={i} className="border-b">
                   <td className="py-2">{o.id}</td>
                   <td>{o.name}</td>

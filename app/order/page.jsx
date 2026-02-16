@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import AdminLayout from '@/components/AdminLayout'
 import Link from 'next/link'
+import { orders } from '../../Index/data'
 
 export default function OrdersPage() {
   const [filters, setFilters] = useState({
@@ -14,16 +15,7 @@ export default function OrdersPage() {
   })
   const [selectedOrders, setSelectedOrders] = useState([])
 
-  const orders = [
-    { id: '#1001', date: '10 Feb 2026', customer: 'Rahul', amount: '₹1,200', paymentStatus: 'Paid', fulfillmentStatus: 'Shipped', shippingMethod: 'Express' },
-    { id: '#1002', date: '09 Feb 2026', customer: 'Anjali', amount: '₹850', paymentStatus: 'Unpaid', fulfillmentStatus: 'Pending', shippingMethod: 'Standard' },
-    { id: '#1003', date: '09 Feb 2026', customer: 'Vikas', amount: '₹2,400', paymentStatus: 'Paid', fulfillmentStatus: 'Delivered', shippingMethod: 'Express' },
-    { id: '#1004', date: '08 Feb 2026', customer: 'Sneha', amount: '₹650', paymentStatus: 'Unpaid', fulfillmentStatus: 'Pending', shippingMethod: 'Standard' },
-    { id: '#1005', date: '08 Feb 2026', customer: 'Priya', amount: '₹3,200', paymentStatus: 'Paid', fulfillmentStatus: 'Processing', shippingMethod: 'Express' },
-    { id: '#1006', date: '07 Feb 2026', customer: 'Amit', amount: '₹1,500', paymentStatus: 'Refunded', fulfillmentStatus: 'Cancelled', shippingMethod: 'Pickup' },
-    { id: '#1007', date: '07 Feb 2026', customer: 'Neha', amount: '₹980', paymentStatus: 'Paid', fulfillmentStatus: 'Delivered', shippingMethod: 'Standard' },
-    { id: '#1008', date: '06 Feb 2026', customer: 'Karan', amount: '₹4,100', paymentStatus: 'Paid', fulfillmentStatus: 'Shipped', shippingMethod: 'Express' },
-  ]
+
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }))

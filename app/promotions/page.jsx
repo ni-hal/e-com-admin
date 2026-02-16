@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import AdminLayout from '@/components/AdminLayout'
-
+import {promotions,   bannersData} from '../../Index/data'
 export default function PromotionsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -11,17 +11,9 @@ export default function PromotionsPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [confirmAction, setConfirmAction] = useState({ type: '', coupon: null })
 
-  const [coupons, setCoupons] = useState([
-    { id: 1, code: 'SAVE10', type: 'Percentage', value: '10%', minCart: '₹500', usage: 25, validFrom: '01 Feb 2026', validTo: '28 Feb 2026', status: 'Active' },
-    { id: 2, code: 'FLAT100', type: 'Fixed', value: '₹100', minCart: '₹1000', usage: 10, validFrom: '01 Feb 2026', validTo: '10 Feb 2026', status: 'Expired' },
-    { id: 3, code: 'WELCOME50', type: 'Fixed', value: '₹50', minCart: '₹300', usage: 50, validFrom: '01 Jan 2026', validTo: '31 Dec 2026', status: 'Active' },
-    { id: 4, code: 'MEGA20', type: 'Percentage', value: '20%', minCart: '₹2000', usage: 5, validFrom: '15 Feb 2026', validTo: '20 Feb 2026', status: 'Disabled' },
-  ])
+  const [coupons, setCoupons] = useState(promotions)
 
-  const [banners, setBanners] = useState([
-    { id: 1, title: 'Summer Sale Banner', image: '/banner1.jpg', url: '/sale/summer', startDate: '01 Mar 2026', endDate: '15 Mar 2026', status: 'Active' },
-    { id: 2, title: 'Festival Offer Banner', image: '/banner2.jpg', url: '/sale/festival', startDate: '10 Feb 2026', endDate: '28 Feb 2026', status: 'Active' },
-  ])
+  const [banners, setBanners] = useState(bannersData)
 
   const [couponForm, setCouponForm] = useState({
     code: '',

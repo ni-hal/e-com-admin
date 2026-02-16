@@ -2,49 +2,13 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import AdminLayout from '@/components/AdminLayout'
+import { customers } from '../../Index/data'
 
 export default function CustomersPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
 
-  const customers = [
-    {
-      id: 1,
-      name: 'Rahul Sharma',
-      email: 'rahul@gmail.com',
-      phone: '9876543210',
-      ordersCount: 5,
-      lastOrderDate: '10 Feb 2026',
-      status: 'Active'
-    },
-    {
-      id: 2,
-      name: 'Anjali Nair',
-      email: 'anjali@gmail.com',
-      phone: '9123456780',
-      ordersCount: 2,
-      lastOrderDate: '05 Feb 2026',
-      status: 'Active'
-    },
-    {
-      id: 3,
-      name: 'Priya Verma',
-      email: 'priya@gmail.com',
-      phone: '9988776655',
-      ordersCount: 8,
-      lastOrderDate: '12 Feb 2026',
-      status: 'Active'
-    },
-    {
-      id: 4,
-      name: 'Amit Kumar',
-      email: 'amit@gmail.com',
-      phone: '9876512340',
-      ordersCount: 0,
-      lastOrderDate: '-',
-      status: 'Inactive'
-    }
-  ]
+ 
 
   const handleExport = () => {
     alert('Exporting customers to CSV...')

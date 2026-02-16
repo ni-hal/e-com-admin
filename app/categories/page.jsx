@@ -4,17 +4,10 @@ import AdminLayout from '@/components/AdminLayout'
 import { useCategories } from '@/context/CategoryContext'
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi'
 import { FaCaretDown,FaCaretRight } from 'react-icons/fa'
-
+import { categoriesData } from '../../Index/data'
 export default function CategoryManagement() {
   const { categories: contextCategories, setCategories: setContextCategories } = useCategories()
-  const [categories, setCategories] = useState([
-    { id: 1, nameEn: 'Electronics', nameAr: 'إلكترونيات', parentId: null, sortOrder: 1, status: 'Active', slug: 'electronics', metaTitle: '', metaDesc: '', banner: '' },
-    { id: 2, nameEn: 'Mobiles', nameAr: 'الهواتف المحمولة', parentId: 1, sortOrder: 1, status: 'Active', slug: 'mobiles', metaTitle: '', metaDesc: '', banner: '' },
-    { id: 3, nameEn: 'Laptops', nameAr: 'أجهزة الكمبيوتر المحمولة', parentId: 1, sortOrder: 2, status: 'Active', slug: 'laptops', metaTitle: '', metaDesc: '', banner: '' },
-    { id: 4, nameEn: 'Fashion', nameAr: 'أزياء', parentId: null, sortOrder: 2, status: 'Active', slug: 'fashion', metaTitle: '', metaDesc: '', banner: '' },
-    { id: 5, nameEn: 'Men', nameAr: 'رجال', parentId: 4, sortOrder: 1, status: 'Active', slug: 'men', metaTitle: '', metaDesc: '', banner: '' },
-    { id: 6, nameEn: 'Women', nameAr: 'نساء', parentId: 4, sortOrder: 2, status: 'Active', slug: 'women', metaTitle: '', metaDesc: '', banner: '' },
-  ])
+  const [categories, setCategories] = useState(categoriesData)
 
   useEffect(() => {
     setContextCategories(categories.filter(c => c.status === 'Active').map(c => ({ 

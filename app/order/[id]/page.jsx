@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import AdminLayout from '@/components/AdminLayout'
+import { orderData } from '../../../Index/data'
 import Link from 'next/link'
 
 export default function OrderDetailPage() {
@@ -10,46 +11,7 @@ export default function OrderDetailPage() {
   const [statusUpdate, setStatusUpdate] = useState('')
   const [adminNotes, setAdminNotes] = useState('')
 
-  const orderData = {
-    id: orderId,
-    date: '10 Feb 2026',
-    customer: 'Rahul Sharma',
-    email: 'rahul.sharma@example.com',
-    phone: '+91 98765 43210',
-    total: '₹1,200',
-    paymentStatus: 'Paid',
-    fulfillmentStatus: 'Shipped',
-    billingAddress: '123 MG Road, Bangalore, Karnataka 560001',
-    shippingAddress: '123 MG Road, Bangalore, Karnataka 560001',
-    items: [
-      { name: 'Wireless Mouse', variant: 'Black / Standard', price: '₹600', qty: 2, total: '₹1,200' }
-    ],
-    subtotal: '₹1,200',
-    tax: '₹0',
-    shipping: '₹0',
-    discount: '₹0',
-    grandTotal: '₹1,200',
-    payment: {
-      method: 'UPI',
-      transactionId: 'TXN123456789',
-      status: 'Success',
-      date: '10 Feb 2026, 10:30 AM'
-    },
-    timeline: [
-      { status: 'Order Placed', date: '10 Feb 2026, 10:30 AM', completed: true },
-      { status: 'Payment Confirmed', date: '10 Feb 2026, 10:31 AM', completed: true },
-      { status: 'Processing', date: '10 Feb 2026, 11:00 AM', completed: true },
-      { status: 'Shipped', date: '11 Feb 2026, 09:00 AM', completed: true },
-      { status: 'Delivered', date: 'Expected: 13 Feb 2026', completed: false }
-    ],
-    shipment: {
-      courier: 'BlueDart Express',
-      awb: 'BD123456789IN',
-      trackingUrl: 'https://bluedart.com/track/BD123456789IN',
-      dispatchDate: '11 Feb 2026',
-      expectedDelivery: '13 Feb 2026'
-    }
-  }
+
 
   const getPaymentBadge = (status) => {
     const styles = {

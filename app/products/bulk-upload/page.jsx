@@ -1,27 +1,14 @@
 'use client'
 import { useState } from 'react'
 import AdminLayout from '@/components/AdminLayout'
+import { validationResults } from '../../../Index/data'
 
 export default function BulkUploadPage() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [showResults, setShowResults] = useState(false)
   const [dragActive, setDragActive] = useState(false)
 
-  const validationResults = {
-    totalRows: 150,
-    validRows: 142,
-    errorRows: 8,
-    errors: [
-      { row: 5, productName: 'Wireless Mouse', field: 'Product Name', error: 'Product name already exists' },
-      { row: 12, productName: '', field: 'Product Name', error: 'Product name is required' },
-      { row: 23, productName: 'Gaming Keyboard', field: 'Price', error: 'Invalid price format' },
-      { row: 34, productName: 'USB Cable', field: 'Price', error: 'Price must be greater than 0' },
-      { row: 45, productName: 'Laptop Stand', field: 'Stock', error: 'Stock cannot be negative' },
-      { row: 67, productName: 'Monitor Arm', field: 'Category', error: 'Category does not exist' },
-      { row: 89, productName: 'Desk Lamp', field: 'SKU', error: 'SKU already exists' },
-      { row: 103, productName: 'Phone Holder', field: 'Stock', error: 'Stock must be a valid number' },
-    ]
-  }
+ 
 
   const handleDrag = (e) => {
     e.preventDefault()

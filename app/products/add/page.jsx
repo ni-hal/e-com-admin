@@ -9,6 +9,7 @@ import Checkbox from '@/components/ui/Checkbox'
 import Section from '@/components/ui/Section'
 import { useProducts } from '@/context/ProductContext'
 import { useCategories } from '@/context/CategoryContext'
+import { tabs } from '@/Index/data'
 
 export default function AddProductPage() {
   const router = useRouter()
@@ -22,17 +23,7 @@ export default function AddProductPage() {
     status: 'Draft', featured: false, bestSeller: false, newArrival: false, onSale: false,
   })
 
-  const tabs = [
-    { id: 'basic', label: 'Basic Info', icon: '📝' },
-    { id: 'media', label: 'Media', icon: '🖼️' },
-    { id: 'pricing', label: 'Pricing', icon: '💰' },
-    { id: 'variants', label: 'Variants', icon: '🎨' },
-    { id: 'inventory', label: 'Inventory', icon: '📦' },
-    { id: 'attributes', label: 'Attributes', icon: '🏷️' },
-    { id: 'seo', label: 'SEO', icon: '🔍' },
-    { id: 'labels', label: 'Labels', icon: '⭐' },
-    { id: 'visibility', label: 'Visibility', icon: '👁️' },
-  ]
+ 
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }))
 

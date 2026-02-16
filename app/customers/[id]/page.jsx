@@ -2,62 +2,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import AdminLayout from '@/components/AdminLayout'
+import { customerData } from '../../../Index/data'
 
 export default function CustomerProfilePage({ params }) {
   const [notes, setNotes] = useState('Customer prefers morning deliveries.')
-
-  const customerData = {
-    1: {
-      name: 'Rahul Sharma',
-      email: 'rahul@gmail.com',
-      phone: '9876543210',
-      totalOrders: 5,
-      totalSpent: '₹4,250',
-      customerSince: '15 Jan 2025',
-      billingAddress: {
-        street: '123, MG Road',
-        city: 'Bangalore',
-        state: 'Karnataka',
-        zip: '560001'
-      },
-      shippingAddress: {
-        street: '123, MG Road',
-        city: 'Bangalore',
-        state: 'Karnataka',
-        zip: '560001'
-      },
-      orders: [
-        { id: '#1001', date: '10 Feb 2026', amount: '₹1,200', paymentStatus: 'Paid', orderStatus: 'Delivered' },
-        { id: '#1005', date: '02 Feb 2026', amount: '₹650', paymentStatus: 'Paid', orderStatus: 'Shipped' },
-        { id: '#998', date: '28 Jan 2026', amount: '₹1,500', paymentStatus: 'Paid', orderStatus: 'Delivered' },
-        { id: '#985', date: '20 Jan 2026', amount: '₹900', paymentStatus: 'Paid', orderStatus: 'Delivered' }
-      ]
-    },
-    2: {
-      name: 'Anjali Nair',
-      email: 'anjali@gmail.com',
-      phone: '9123456780',
-      totalOrders: 2,
-      totalSpent: '₹1,850',
-      customerSince: '01 Feb 2025',
-      billingAddress: {
-        street: '45, Marine Drive',
-        city: 'Mumbai',
-        state: 'Maharashtra',
-        zip: '400002'
-      },
-      shippingAddress: {
-        street: '45, Marine Drive',
-        city: 'Mumbai',
-        state: 'Maharashtra',
-        zip: '400002'
-      },
-      orders: [
-        { id: '#1008', date: '05 Feb 2026', amount: '₹1,100', paymentStatus: 'Paid', orderStatus: 'Delivered' },
-        { id: '#1002', date: '03 Feb 2026', amount: '₹750', paymentStatus: 'Paid', orderStatus: 'Delivered' }
-      ]
-    }
-  }
 
   const customer = customerData[params.id] || customerData[1]
 
